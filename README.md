@@ -12,7 +12,7 @@ APIJSON 本身的权限定义在枚举`RequestRole` 中，且与框架本身的�
 
 这一问题的核心是权限定义在了枚举里，所以难以扩展。「采用接口来模仿可扩展的枚举」是 *Effective Java* 中介绍的一种技巧，其原理是定义一个接口，然后让枚举实现这个接口，在所有使用枚举的地方换用接口，从而模仿了一个可扩展的枚举。
 
-在本项目中，定义了一个新的接口 `IRequestRole`，令 `RequestRole` 实现这个接口，再依次修改框架中其他相关联的位置。通过 `IRequestRole.register` 方法，用户可以注册自己的权限枚举。通过 `IRequestRole.get` 方法，可以从权限字符串转换回对应的权限枚举。
+在本项目中，定义了一个新的接口 [`IRequestRole`](https://github.com/jerrylususu/apijson_role_extend/blob/master/src/main/java/apijson/orm/IRequestRole.java)，令 `RequestRole` 实现这个接口，再依次修改框架中其他相关联的位置。通过 `IRequestRole.register` 方法，用户可以注册自己的权限枚举。通过 `IRequestRole.get` 方法，可以从权限字符串转换回对应的权限枚举。
 
 ## 主要修改
 
@@ -85,9 +85,10 @@ APIJSON 本身的权限定义在枚举`RequestRole` 中，且与框架本身的�
    }
    ```
 
-## 破坏性改动
+## 问题
 
-* MethodAccess 类型修改
+* MethodAccess 类型修改，不兼容旧的实现，升级的时候需要手动修改
+* 引入了一些类型不安全，主要是在 `IRequestRole` 里有对 Class 的直接操作
 
 
 
